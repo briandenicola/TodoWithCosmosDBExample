@@ -2,6 +2,10 @@ This repo is to show how you can create an Azure DocumentDB Database and read fr
 
 The follow was completed using Centos but .NET Core and the new Az 2.0 cli can run on a variety of Linux distributions. 
 
+Azure - Install cli
+============================
+1. curl -L https://aka.ms/InstallAzureCli | bash
+
 DotNet 1.1 Install 
 ==================
 1. sudo yum install libunwind libicu
@@ -17,17 +21,26 @@ This this will be used to create a docdb database collection and insert two reco
 3. wget https://github.com/bjd145/DocumentDBSampleCode/archive/master.zip (or do a git clone https://github.com/bjd145/DocumentDBSampleCode.git )
 4. unzip master.zip
 5. dotnet restore
-6. dotnet build - This will be executed later on.
-	   
+6. dotnet build - This will be executed in the next secion.
+
+Azure - Create Document DB
+============================
+1. az login 
+2. az group create --name DocDbTest --location westus
+3. az documentdb create -g DocDbTest -n <uniqueName> --kind MongoDB (Make note of the "documentEndpoint")
+4. az documentdb list-keys -g DocDbTest -n <uniqueName> (Make note of the "primaryMasterKey")
+5. cd <path/to/docdbclient>
+6. dotnet run [endpointUrl] [databaseName] [collectionName] [accessKey] - This will create a database collection and insert two records
+
 DocumentDB ASP.NET Code
 ==================
-This this will be used to display items in the DocDb Database Collection in a web page 
+This this will be used to display items in the DocDb Database Collection in a web page.  The code is also in the DocumentDB repo or we can create it from scratch.
 1. dotnet new mvc -o docdb 
 2. Update Working.csproj to include `<PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.2.1" />`
 3. dotnet restore 
 4. dotnet build
-5. export PrimaryKey=''
-6. export DocDbUri=''
+5. export PrimaryKey='' (primaryMasterKey from earlier)
+6. export DocDbUri='' (documentEndpoint from earlier)
 7. Update Program.cs: 
 	```CSharp
 	var host = new WebHostBuilder()
@@ -103,7 +116,7 @@ This this will be used to display items in the DocDb Database Collection in a we
 	
 Docker
 ======
-1. Create dockerfile
+1. Create dockerfile in the parent directory of /path/to/publish/directory
 	```docker
 	FROM microsoft/dotnet:latest
 	RUN mkdir -p /usr/src/app
@@ -117,18 +130,12 @@ Docker
 4. curl http://localhost:8080 (May need to do this from another console)
 5. sudo docker push <name/for_docker_image>
 
-Azure Cli
-=========
-1. curl -L https://aka.ms/InstallAzureCli | bash
-2. az login 
-3. az group create --name DocDbTest --location westus
-4. az appservice plan create -g DocDbTest -n LinuxServicePlan --is-linux --number-of-workers 1 --sku S1
-5. az appservice web create -g DocDbTest -p LinuxServicePlan -n <uniqueName>
-6. az appservice web config container update -g DocDbTest -n  <uniqueName> -c <name/for_docker_image>
-7. az documentdb create -g DocDbTest -n <uniqueName> --kind MongoDB (Make note of the "documentEndpoint")
-8. az documentdb list-keys -g DocDbTest -n <uniqueName> (Make note of the "primaryMasterKey")
-9. cd <path/to/docdbclient>
-10. `dotnet run <endpointUrl> <databaseName> <collectionName> <accessKey>`
-11. az appservice web config appsettings update -g DocDbTest -n <uniqueName> --settings PORT=5000 PrimaryKey=<accessKey> DocDbUri=<endpointUrl>
+Azure - Create Web for Linux
+============================
+1. az login 
+2. az appservice plan create -g DocDbTest -n LinuxServicePlan --is-linux --number-of-workers 1 --sku S1
+3. az appservice web create -g DocDbTest -p LinuxServicePlan -n <uniqueName>
+4. az appservice web config container update -g DocDbTest -n  <uniqueName> -c <name/for_docker_image>
+5. az appservice web config appsettings update -g DocDbTest -n <uniqueName> --settings PORT=5000 PrimaryKey=<accessKey> DocDbUri=<endpointUrl>
 
 Enjoy!
