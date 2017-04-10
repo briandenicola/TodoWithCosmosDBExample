@@ -4,20 +4,35 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
+using Newtonsoft.Json;
 
 namespace docdbCreate
 {
+    class Person
+    {
+        [JsonProperty(PropertyName = "id")]
+	public string Id { get; set; }
+	public string lastName { get; set; }
+	public string firstName { get; set; }
+	public string age { get; set; }
+	public override string ToString()
+	{
+	    return JsonConvert.SerializeObject(this);
+	}
+    }
+
     class Program
     {
         private static readonly ConnectionPolicy connectionPolicy = new ConnectionPolicy { UserAgentSuffix = " samples-net/3" };
 	private static DocumentClient client;
 	private static Database database; 
 	private static DocumentCollection coll; 
+	private static Document doc; 
         
 	static void Main(string[] args)
         {
 	    if( args.Length != 4 ) {
-	        System.Console.Write("docdbCreate <endpointUrl> <databaseName> <collectionName> <accessKey>");
+	        Console.WriteLine("docdbCreate <endpointUrl> <databaseName> <collectionName> <accessKey>");
 		return;
 	    }
 
@@ -32,6 +47,8 @@ namespace docdbCreate
                 {
                     database = CreateDatabaseAsync(databaseName).Result;
                     coll = CreateDatabaseCollectionAsync(collectionName).Result; 
+		    doc = InsertIntoDatabaseCollection( new Person { Id = "001", lastName = "Caesar", firstName = "Julius", age = "60" } ).Result;
+		    doc = InsertIntoDatabaseCollection( new Person { Id = "002", lastName = "Caesar", firstName = "August", age = "74" } ).Result;
                 }
             }            
             catch (DocumentClientException de)
@@ -45,6 +62,13 @@ namespace docdbCreate
                 Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
             }
         }
+
+	private static async Task<Document> InsertIntoDatabaseCollection( Person person ) 
+	{ 
+   	     Console.WriteLine( "Person being created {0}",  person.firstName );
+	     Document doc = await client.CreateDocumentAsync( coll.SelfLink, person );	
+	     return doc;
+	}
 
         private static async Task<Database> CreateDatabaseAsync(string name)
         {
