@@ -28,8 +28,16 @@ This this will be used to display items in the DocDb Database Collection in a we
 4. dotnet build
 5. export PrimaryKey=''
 6. export DocDbUri=''
-7. Update Program.cs: `var host = new WebHostBuilder().UseKestrel().UseUrls("http://*:5000").UseContentRoot(Directory.GetCurrentDirectory()).UseStartup<Startup>().Build();`
+7. Update Program.cs: 
+	```CSharp
+	var host = new WebHostBuilder()
+		.UseKestrel().UseUrls("http://*:5000")
+		.UseContentRoot(Directory.GetCurrentDirectory())
+		.UseStartup<Startup>()
+		.Build();
+	```
 8. Create Models/Person.cs
+	```CSharp
 		using System;
 		using System.Collections.Generic;
 		using Newtonsoft.Json;
@@ -49,12 +57,13 @@ This this will be used to display items in the DocDb Database Collection in a we
 				}
 			}
 		}
-9. Edit Controllers/HomeController.cs
-	using Microsoft.Azure.Documents;
-	using Microsoft.Azure.Documents.Client;
+	```
+9. Edit Controllers/HomeController.cs:using System;
+	```CSharp
+		using Microsoft.Azure.Documents;
+		using Microsoft.Azure.Documents.Client;
 		using Newtonsoft.Json;
 		using Working.Models;
-	
 		…
 		public IActionResult Index()
 		{
@@ -62,7 +71,7 @@ This this will be used to display items in the DocDb Database Collection in a we
 			string collectionName = "wordsCollection";
 			string PrimaryKey = Environment.GetEnvironmentVariable("PrimaryKey");
 			string EndpointUri= Environment.GetEnvironmentVariable("DocDbUri");
-			
+
 			this.client = new DocumentClient(new Uri(EndpointUri), PrimaryKey);
 			
 			FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
@@ -72,32 +81,37 @@ This this will be used to display items in the DocDb Database Collection in a we
 				.Where(f => f.f != null);
 			
 			ViewData["Persons"] = query;
-			return View();`
-		}	
+			return View();
+		}
+	```
 10. Edit Views/Home/Index.cshtml
-		`@model Working.Models.Person
+	```CSharp
+		@model Working.Models.Person
 		@{
 			ViewData["Title"] = "Home Page";
 		}
 		<h2>Documents</h2>
 		<div>
-			@foreach (var item in ViewData["Persons"] as IQueryable<Working.Models.Person> ) {
+		@foreach (var item in ViewData["Persons"] as IQueryable<Working.Models.Person> ) {
 			<p>FirstName - @(item.f), LastName - @(item.l), Age - @(item.a)</p>
 		}
-		</div>`
+		</div>
+	```
 11. dotnet build
 12. dotnet run
 13. dotnet publish -o /path/to/publish/directory
 	
 Docker
 ======
-1. Create dockerfile 
+1. Create dockerfile
+	```docker
 	FROM microsoft/dotnet:latest
 	RUN mkdir -p /usr/src/app
 	WORKDIR /usr/src/app
 	COPY publish /usr/src/app
 	EXPOSE 5000/tcp
 	ENTRYPOINT dotnet /usr/src/app/Working.dll (or whatever your called your application with dotnet create)
+	```
 2. sudo docker build -t <name/for_docker_image> .
 3. sudo docker run -p 8080:5000 -e PrimaryKey='…==' -e DocDbUri='https://..' <name/for_docker_image> -d
 4. curl http://localhost:8080 (May need to do this from another console)
