@@ -1,0 +1,12 @@
+﻿@model Working.Models.Person
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Documents</h2>
+<div>
+
+@foreach (var item in ViewData["Persons"] as IQueryable<Working.Models.Person> ) {
+    <p>FirstName - @(item.f), LastName - @(item.l), Age - @(item.a)</p>
+}
+</div>

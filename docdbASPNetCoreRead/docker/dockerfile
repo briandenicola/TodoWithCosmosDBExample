@@ -1,0 +1,6 @@
+FROM microsoft/dotnet:latest
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY publish /usr/src/app
+EXPOSE 5000/tcp
+ENTRYPOINT dotnet /usr/src/app/Working.dll
