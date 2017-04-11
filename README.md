@@ -21,7 +21,7 @@ This this will be used to create a docdb database collection and insert two reco
 3. wget https://github.com/bjd145/DocumentDBSampleCode/archive/master.zip (or do a git clone https://github.com/bjd145/DocumentDBSampleCode.git )
 4. unzip master.zip
 5. dotnet restore
-6. dotnet build - This will be executed in the next secion.
+6. dotnet build - This will be executed in the next section.
 
 Azure - Create Document DB
 ============================
@@ -125,17 +125,17 @@ Docker
 	EXPOSE 5000/tcp
 	ENTRYPOINT dotnet /usr/src/app/Working.dll (or whatever your called your application with dotnet create)
 	```
-2. sudo docker build -t <name/for_docker_image> .
-3. sudo docker run -p 8080:5000 -e PrimaryKey='…==' -e DocDbUri='https://..' <name/for_docker_image> -d
+2. sudo docker build -t [name/for_docker_image] .
+3. sudo docker run -p 8080:5000 -e PrimaryKey='…==' -e DocDbUri='https://..' [name/for_docker_image] -d
 4. curl http://localhost:8080 (May need to do this from another console)
-5. sudo docker push <name/for_docker_image>
+5. sudo docker push [name/for_docker_image]
 
 Azure - Create Web for Linux
 ============================
 1. az login 
 2. az appservice plan create -g DocDbTest -n LinuxServicePlan --is-linux --number-of-workers 1 --sku S1
-3. az appservice web create -g DocDbTest -p LinuxServicePlan -n <uniqueName>
-4. az appservice web config container update -g DocDbTest -n  <uniqueName> -c <name/for_docker_image>
-5. az appservice web config appsettings update -g DocDbTest -n <uniqueName> --settings PORT=5000 PrimaryKey=<accessKey> DocDbUri=<endpointUrl>
+3. az appservice web create -g DocDbTest -p LinuxServicePlan -n [uniqueName]
+4. az appservice web config container update -g DocDbTest -n  [uniqueName] -c [name/for_docker_image]
+5. az appservice web config appsettings update -g DocDbTest -n [uniqueName] --settings PORT=5000 PrimaryKey=<accessKey> DocDbUri=<endpointUrl>
 
 Enjoy!
