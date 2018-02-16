@@ -4,5 +4,5 @@ metadata:
   name: docdb
 type: Opaque 
 data:
-  DOCDB_ENDPOINT: aHR0cHM6Ly9iamRkYjAwMi5kb2N1bWVudHMuYXp1cmUuY29t 
-  DOCDB_KEY: ckEyUklNbUMzMHE0cmo4T1dLbzVTMXpBZEw3czhwOE1peVJhZzhyeXBObFRoMk5WNm5ZYW44cXlBMzJReE0yRmR4aFUyRGYzT1U3VDFUak9XNVZnUXc9PQ==
+  DOCDB_ENDPOINT: 
+  DOCDB_KEY: 
