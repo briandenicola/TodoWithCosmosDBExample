@@ -9618,11 +9618,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Working\\todo.core\\todo.core\\todo.core.csproj",
+      "projectUniqueName": "C:\\Code\\DocumentDBSampleCode\\todo.core\\todo.core.csproj",
       "projectName": "todo.core",
-      "projectPath": "C:\\Working\\todo.core\\todo.core\\todo.core.csproj",
+      "projectPath": "C:\\Code\\DocumentDBSampleCode\\todo.core\\todo.core.csproj",
       "packagesPath": "C:\\Users\\brian\\.nuget\\packages\\",
-      "outputPath": "C:\\Working\\todo.core\\todo.core\\obj\\",
+      "outputPath": "C:\\Code\\DocumentDBSampleCode\\todo.core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

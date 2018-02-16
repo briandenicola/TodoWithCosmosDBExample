@@ -12,17 +12,13 @@ namespace todo.Models
 
 		public DocumentDbSettings(IConfiguration configuration)
 		{
-			try
-			{
+			try	{
 				DatabaseName = configuration.GetSection("database").Value;
 				CollectionName = configuration.GetSection("collection").Value;
-				//DatabaseUri = new Uri(configuration.GetSection("endpoint").Value);
-				//DatabaseKey = configuration.GetSection("authKey").Value;
 				DatabaseKey = Environment.GetEnvironmentVariable("DOCDB_KEY");
 				DatabaseUri = new Uri(Environment.GetEnvironmentVariable("DOCDB_ENDPOINT"));
 			}
-			catch
-			{
+			catch {
 				throw new MissingFieldException("IConfiguration missing a valid Azure DocumentDB fields on DocumentDB > [DatabaseName,CollectionName,EndpointUri,Key]");
 			}
 		}

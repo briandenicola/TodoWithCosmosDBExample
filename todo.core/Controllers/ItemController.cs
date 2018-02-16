@@ -11,12 +11,9 @@ namespace todo.Controllers
 	{
 		private static IDocumentDbService _dbService;
 
-		public ItemController(IDocumentDbService dbService)
-		{
-			_dbService = dbService;
-		}
+        public ItemController(IDocumentDbService dbService) => _dbService = dbService;
 
-		[ActionName("Index")]
+        [ActionName("Index")]
 		public async Task<ActionResult> IndexAsync()
 		{
 			var items = await _dbService.GetItems(d => !d.Completed);
@@ -24,7 +21,7 @@ namespace todo.Controllers
 		}
 
 		[ActionName("Create")]
-		public async Task<ActionResult> CreateAsync()
+		public ActionResult Create()
 		{
 			return View();
 		}

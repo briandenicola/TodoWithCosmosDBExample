@@ -24,42 +24,31 @@ namespace todo.Models
 
 		private static async Task CreateDatabaseIfNotExistsAsync()
 		{
-			try
-			{
+			try {
 				await client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(_settings.DatabaseName));
 			}
-			catch (DocumentClientException e)
-			{
-				if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-				{
+			catch (DocumentClientException e) {
+				if (e.StatusCode == System.Net.HttpStatusCode.NotFound)	
 					await client.CreateDatabaseAsync(new Database { Id = _settings.DatabaseName });
-				}
 				else
-				{
 					throw;
-				}
 			}
 		}
 
 		private static async Task CreateCollectionIfNotExistsAsync()
 		{
-			try
-			{
+			try	{
 				await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(_settings.DatabaseName, _settings.CollectionName));
 			}
-			catch (DocumentClientException e)
-			{
-				if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-				{
+			catch (DocumentClientException e) {
+				if (e.StatusCode == System.Net.HttpStatusCode.NotFound)	{
 					await client.CreateDocumentCollectionAsync(
 						UriFactory.CreateDatabaseUri(_settings.DatabaseName),
 						new DocumentCollection { Id = _settings.CollectionName },
 						new RequestOptions { OfferThroughput = 1000 });
 				}
 				else
-				{
 					throw;
-				}
 			}
 		}
 
@@ -71,8 +60,7 @@ namespace todo.Models
 				.AsDocumentQuery();
 
 			List<T> results = new List<T>();
-			while (query.HasMoreResults)
-			{
+			while (query.HasMoreResults) {
 				results.AddRange(await query.ExecuteNextAsync<T>());
 			}
 
@@ -88,7 +76,7 @@ namespace todo.Models
 		{
 			return await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_settings.DatabaseName, _settings.CollectionName, id), item);
 		}
-
+		
 		public async Task<Document> DeleteItemAsync(string id)
 		{
 			return await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(_settings.DatabaseName, _settings.CollectionName, id));
@@ -96,19 +84,15 @@ namespace todo.Models
 
 		public async Task<T> GetItemAsync(string id)
 		{
-			try
-			{
+			try {
 				Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(_settings.DatabaseName, _settings.CollectionName, id));
 				return (T)(dynamic)document;
 			}
-			catch (DocumentClientException e)
-			{
-				if (e.StatusCode == HttpStatusCode.NotFound)
-				{
+			catch (DocumentClientException e) {
+				if (e.StatusCode == HttpStatusCode.NotFound) {
 					return default(T);
 				}
-				else
-				{
+				else {
 					throw;
 				}
 			}

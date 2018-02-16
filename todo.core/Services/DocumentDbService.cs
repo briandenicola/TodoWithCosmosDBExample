@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Microsoft.Azure.Documents;
 using System.Linq.Expressions;
-using System.Collections.Generic;
 using todo.Models;
 using System;
 
