@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: docdbsampleapp
+spec:
+  template:
+    metadata:
+      labels:
+        name: docdbSample
+    spec:
+      containers:
+      - name: docdbpod
+        image: bjd145/docdb-aspnetcore2
+        env:
+        - name: DOCDB_ENDPOINT
+          valueFrom:
+           secretKeyRef:
+             name: docdb
+             key: DOCDB_ENDPOINT
+        - name: DOCDB_KEY
+          valueFrom:
+           secretKeyRef:
+             name: docdb
+             key: DOCDB_KEY
+        ports:
+        - containerPort: 5000                
